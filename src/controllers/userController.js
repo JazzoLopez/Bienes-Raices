@@ -41,12 +41,11 @@ const formPasswordRecovery = (request, response) => {
 const insertUser = async (req, res) => {
 
     console.log("Intentando registrar los datos del nuevo usuario en la Base de Datos");
-    console.log(`Nombre: ${req.body.name}`);//
+    console.log(`Nombre: ${req.body.name}`);
     //*Validando
     await check("name").notEmpty().withMessage("YOUR NAME IS REQUIRED").run(req) //* Express checa el nombre que no venga vacio AHORA MISMO
     await check("email").notEmpty().withMessage("YOUR EMAIL IS REQUIRED").isEmail().withMessage("THIS ISN'T EMAIL FORMAT").run(req)
-    await check("password").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 })
-        .withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").run(req)
+    await check("password").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 })    .withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").run(req)
     await check("confirmPassword").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({
         min: 8
     }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").equals(req.body.password).withMessage("BOTH PASSWORDS FIELDS MUST BE THE SAME").run(req)
@@ -63,6 +62,7 @@ const insertUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (userExists) {
+        
         res.render("auth/register.pug", ({
             page: "New account",
             errors: [{ msg: `the user ${req.body.email} already exist` }],
@@ -110,7 +110,6 @@ const insertUser = async (req, res) => {
 
 }
 
-
 const confirmAccount = async (req, res) => {
    
     const tokenRecived = req.params.token
@@ -121,18 +120,17 @@ const confirmAccount = async (req, res) => {
     })
     if (!userOwner) {
         
-        console.log("no existe")
+        console.log("El token no existe")
         res.render('auth/confirm-account', {
             page: 'Status verification.',
             error: true,
             msg: 'We have found some issues and could not verify your account.',
-            
             button:'Access denied'
             
         })
     }
     else {
-        console.log("existe");
+        console.log("El token existe");
         userOwner.token = null;
         userOwner.verified = true;
         await userOwner.save();
@@ -153,15 +151,12 @@ const confirmAccount = async (req, res) => {
 const updatePassword = (req, res) =>{
  
 return 0;
-}
+} //!Sin empezar
 
 const emailChangePassword = async  (req, res) =>{
     console.log(`El usuario ha solicitado cambiar su contraseña por lo que se le enviara un correo electronico a ${req.body.email} con la liga para actualizar su contraseña.`)
-     await check("email").notEmpty().withMessage("YOUR EMAIL IS REQUIRED").isEmail().withMessage("THIS IS NOT EMAIL FORMAT").run(req)
+    await check("email").notEmpty().withMessage("YOUR EMAIL IS REQUIRED").isEmail().withMessage("THIS IS NOT EMAIL FORMAT").run(req);
     let resultValidate = validationResult(req);
-
-    
-
     const { name, email } = req.body;
 
     if (resultValidate.isEmpty()) {
@@ -181,32 +176,38 @@ const emailChangePassword = async  (req, res) =>{
             });
         }
         else {
-            
+            console.log("envio de correo");
             const token = generateToken();
             userExists.token = token;
             userExists.save();
 
            //TODO: enviar el correo con el nuevo token
-           emailPasswordRecovery({
-            name:userExists.name,
-            email:userExists.email,
-            token:userExists.token
-           })
+          
+           emailPasswordRecovery({name:userExists.name, email:userExists.email, token:userExists.token})
+           
            res.render('templates/message', {
             page: 'Email Send',
             msg: `We have sent an email to account: ${email}`,
             type:"success"
+            
             // button:'Now you can login',
              
         });
         }
     }
     else{
-             res.render('auth/confirm-account', {
+             res.render('auth/recovery', {
             page: 'Status verification.',
             error: false,
             msg: 'Your account has been confirmed successfuly.',
             button:'Now you can login',
+            errors: resultValidate.array(), user: {
+                    name: req.body.name,
+                    email: req.body.email
+                },
+                 
+            
+            
              
         });
     }

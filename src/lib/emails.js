@@ -273,7 +273,7 @@ const emailPasswordRecovery = async (userData) => {
   
   
           <fieldset>
-            <legend align="center">New account</legend>
+            <legend align="center">Change password</legend>
       
           <p style="font-size: 18px; margin-top: 20px;">Welcome to RealState-220627, ${name}!</p>
           <p>Thank you for choosing to search, sell, and buy properties. To continue using our platform, please click the link below to activate your account:</p>
