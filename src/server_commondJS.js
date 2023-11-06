@@ -1,8 +1,6 @@
 //commond js no se puede tener ecms y commond al mismo
 //Hotdemon, práctica 19 Mi primer proyecto en con commond
 const express = require('express');
-
-
 //Instanciamos el modulo
 const app = express();
 
@@ -27,7 +25,6 @@ app.get('/misDatos', (req, res) => res.json({
     matricula: " 220627"}));
 
 //Servidor en express con commond
-
 
 
 //! CSRF

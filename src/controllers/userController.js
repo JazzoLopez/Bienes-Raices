@@ -1,32 +1,46 @@
 import User from "../models/user.js";
 import { check, validationResult } from "express-validator";
 import { generateToken } from "../lib/tokens.js";
+import bcrypt from 'bcrypt';
 import { emailRegister, emailPasswordRecovery } from "../lib/emails.js";
 
 
 const formLogin = (request, response) => {
-    
+
     response.render("../views/auth/login.pug", {
         isLogged: false,
         page: "Login",
-        
+
     })
 }
 
-const formPasswordUpdate = (request, response) => {
-    
+const formPasswordUpdate = async (request, response) => {
+    const {token}= request.params;
+    const user = await User.findOne({where: {token}})
+    console.log(user);
+    if(!user){
+        response.render('auth/confirm-account', {
+            page: 'password recovery',
+            error: true,
+            msg: 'We have found some issues and could not verify your account.',
+            button: 'Access denied'
+
+        })
+    }
+
     response.render("../views/auth/password-update.pug", {
         isLogged: false,
         page: "Password update",
-        
+
     })
 }
+
 
 const formRegister = (request, response) => {
 
     response.render("auth/register.pug", {
         page: "Creating a new account...",
-        
+
     })
 }
 
@@ -34,7 +48,7 @@ const formPasswordRecovery = (request, response) => {
 
     response.render("auth/recovery.pug", {
         page: "Password Recovery",
-        
+
     })
 }
 
@@ -45,13 +59,11 @@ const insertUser = async (req, res) => {
     //*Validando
     await check("name").notEmpty().withMessage("YOUR NAME IS REQUIRED").run(req) //* Express checa el nombre que no venga vacio AHORA MISMO
     await check("email").notEmpty().withMessage("YOUR EMAIL IS REQUIRED").isEmail().withMessage("THIS ISN'T EMAIL FORMAT").run(req)
-    await check("password").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 })    .withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").run(req)
-    await check("confirmPassword").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({
-        min: 8
-    }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").equals(req.body.password).withMessage("BOTH PASSWORDS FIELDS MUST BE THE SAME").run(req)
-    // res.json(validationResult(req));//*PARA VER EL JSON
-
+    await check("password").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").run(req)
+    await check("confirmPassword").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").equals(req.body.password).withMessage("BOTH PASSWORDS FIELDS MUST BE THE SAME").run(req)
+    //res.json(validationResult(req));//*PARA VER EL JSON
     console.log(`El total de errores fueron de: ${validationResult.length} errores de validación`)
+
     let resultValidate = validationResult(req);
     const userExists = await User.findOne({
         where: {
@@ -62,7 +74,7 @@ const insertUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (userExists) {
-        
+
         res.render("auth/register.pug", ({
             page: "New account",
             errors: [{ msg: `the user ${req.body.email} already exist` }],
@@ -70,7 +82,7 @@ const insertUser = async (req, res) => {
                 name: req.body.name,
                 email: req.body.email
             },
-             
+
 
         }))
     }
@@ -84,15 +96,11 @@ const insertUser = async (req, res) => {
         res.render("templates/message.pug", {
             page: "create account successfull",
             message: email,
-            type:"success"
-             
+            type: "success"
+
         }) //* Esta linea es la que inserta
 
-        emailRegister({
-            email,
-            name,
-            token
-        });
+        emailRegister({email, name, token});
 
     }
 
@@ -103,7 +111,7 @@ const insertUser = async (req, res) => {
                 name: req.body.name,
                 email: req.body.email
             },
-             
+
         }))
     }
 
@@ -111,7 +119,7 @@ const insertUser = async (req, res) => {
 }
 
 const confirmAccount = async (req, res) => {
-   
+
     const tokenRecived = req.params.token
     const userOwner = await User.findOne({
         where: {
@@ -119,14 +127,14 @@ const confirmAccount = async (req, res) => {
         }
     })
     if (!userOwner) {
-        
+
         console.log("El token no existe")
         res.render('auth/confirm-account', {
             page: 'Status verification.',
             error: true,
             msg: 'We have found some issues and could not verify your account.',
-            button:'Access denied'
-            
+            button: 'Access denied'
+
         })
     }
     else {
@@ -139,8 +147,8 @@ const confirmAccount = async (req, res) => {
             page: 'Status verification.',
             error: false,
             msg: 'Your account has been confirmed successfuly.',
-            button:'Now you can login',
-             
+            button: 'Now you can login',
+
         });
 
     };
@@ -148,12 +156,38 @@ const confirmAccount = async (req, res) => {
 
 }
 
-const updatePassword = (req, res) =>{
- 
-return 0;
-} //!Sin empezar
+const updatePassword = async (req, res) => {
+ console.log(`Guardando password`);
 
-const emailChangePassword = async  (req, res) =>{
+ await check("password").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").run(req)
+ await check("confirmPassword").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").equals(req.body.password).withMessage("BOTH PASSWORDS FIELDS MUST BE THE SAME").run(req)
+ let resultValidate = validationResult(req);
+ if(resultValidate.isEmpty()) {
+    const {token} = req.params
+ const {password} = req.body
+ const user = await User.findOne({where:{token}})
+
+ const salt = await bcrypt.genSalt(10);
+ user.password = await bcrypt.hash(password,salt);
+ user.token = null;
+ await user.save();
+ res.render('auth/confirm-account.pug',{
+    page:"Password recovery",
+    button:"Back to login",
+    msg:"The password has been change succesfully"
+ })
+ }
+ 
+ else{ 
+    res.render("auth/password-update.pug", ({
+    page: "New account",
+    errors:resultValidate.array()
+
+}))}
+
+}
+
+const emailChangePassword = async (req, res) => {
     console.log(`El usuario ha solicitado cambiar su contraseña por lo que se le enviara un correo electronico a ${req.body.email} con la liga para actualizar su contraseña.`)
     await check("email").notEmpty().withMessage("YOUR EMAIL IS REQUIRED").isEmail().withMessage("THIS IS NOT EMAIL FORMAT").run(req);
     let resultValidate = validationResult(req);
@@ -166,13 +200,15 @@ const emailChangePassword = async  (req, res) =>{
             }
         });
 
-        if(!userExists){ //Si no existe
+        if (!userExists) { //Si no existe
             console.log(`El usuario: ${email} que esta intentando recuperar su contraseña no existe`);
             res.render("templates/message.pug", {
                 page: "User not found",
-                message: `The user associated with: ${email} does not exist in database.`,
-                type:"error"
-             
+                part1:`The user associated with: `,
+                part2: ` does not exist in database.`,
+                message: `${email}`,
+                type: "error"
+
             });
         }
         else {
@@ -181,42 +217,33 @@ const emailChangePassword = async  (req, res) =>{
             userExists.token = token;
             userExists.save();
 
-           //TODO: enviar el correo con el nuevo token
-          
-           emailPasswordRecovery({name:userExists.name, email:userExists.email, token:userExists.token})
-           
-           res.render('templates/message', {
-            page: 'Email Send',
-            msg: `We have sent an email to account: ${email}`,
-            type:"success"
-            
-            // button:'Now you can login',
-             
-        });
+            //TODO: enviar el correo con el nuevo token
+
+            emailPasswordRecovery({ name: userExists.name, email: userExists.email, token: userExists.token })
+
+            res.render('templates/message', {
+                page: 'Email Send',
+                message: `${email}`,
+                type: "success"
+
+                // button:'Now you can login',
+
+            });
         }
     }
-    else{
-             res.render('auth/recovery', {
+    else {
+        res.render('auth/recovery', {
             page: 'Status verification.',
             error: false,
             msg: 'Your account has been confirmed successfuly.',
-            button:'Now you can login',
+            button: 'Now you can login',
             errors: resultValidate.array(), user: {
-                    name: req.body.name,
-                    email: req.body.email
-                },
-                 
-            
-            
-             
+                name: req.body.name,
+                email: req.body.email
+            },
         });
     }
-
-    
-    
-    
-return 0;
+    return 0;
 }
 
-
-export { formLogin, formRegister, formPasswordRecovery,formPasswordUpdate, insertUser, confirmAccount, updatePassword, emailChangePassword};
+export { formLogin, formRegister, formPasswordRecovery, formPasswordUpdate, insertUser, confirmAccount, updatePassword, emailChangePassword };
