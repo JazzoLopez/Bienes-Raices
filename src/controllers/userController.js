@@ -59,8 +59,8 @@ const insertUser = async (req, res) => {
     //*Validando
     await check("name").notEmpty().withMessage("YOUR NAME IS REQUIRED").run(req) //* Express checa el nombre que no venga vacio AHORA MISMO
     await check("email").notEmpty().withMessage("YOUR EMAIL IS REQUIRED").isEmail().withMessage("THIS ISN'T EMAIL FORMAT").run(req)
-    await check("password").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").run(req)
-    await check("confirmPassword").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8 }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").equals(req.body.password).withMessage("BOTH PASSWORDS FIELDS MUST BE THE SAME").run(req)
+    await check("password").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8, max: 20}).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").run(req)
+    await check("confirmPassword").notEmpty().withMessage("YOUR PASSWORD IS REQUIRED").isLength({ min: 8, max: 20 }).withMessage("YOUR PASSWORD MUST HAVE 8 CHARACTERS AT LEAST").equals(req.body.password).withMessage("BOTH PASSWORDS FIELDS MUST BE THE SAME").run(req)
     //res.json(validationResult(req));//*PARA VER EL JSON
     console.log(`El total de errores fueron de: ${validationResult.length} errores de validación`)
 
@@ -177,7 +177,7 @@ const updatePassword = async (req, res) => {
     msg:"The password has been change succesfully"
  })
  }
- 
+
  else{ 
     res.render("auth/password-update.pug", ({
     page: "New account",
@@ -246,4 +246,69 @@ const emailChangePassword = async (req, res) => {
     return 0;
 }
 
-export { formLogin, formRegister, formPasswordRecovery, formPasswordUpdate, insertUser, confirmAccount, updatePassword, emailChangePassword };
+
+
+const authenticateUser = async(request,response ) =>{
+    //Verificar los campos de correo y contraseña
+    await check("email").notEmpty().withMessage("Email field is required").isEmail().withMessage("This is not in email format").run(request)
+    await check("password").notEmpty().withMessage("Password field is required").isLength({max:20,min:8}).withMessage("Password must contain between 8 and 20 characters").run(request)
+
+    // En caso de errores mostrarlos en pantalla
+    let resultValidation=validationResult(request);
+    if(resultValidation.isEmpty()){
+        const {email,password} = request.body;
+        console.log(`El usuario: ${email} esta intentando acceder a la plataforma`)
+       
+        const userExists = await User.findOne({where:{email}})
+       
+        if(!userExists){
+            console.log("El ususario no existe")
+            response.render("auth/login.pug",{
+                page:"Login",
+                errors:[{msg:`The user associated to: ${email} was not found`}],
+                user: {
+                    email: request.body.email
+                }
+            })
+        }else{
+            console.log("El usuario existe")
+            if(!userExists.verified){
+                console.log("Existe, pero no esta verificado");
+                
+                response.render("auth/login.pug",{
+                    page:"Login",
+                    errors:[{msg:`The user associated to: ${email} was found but not verified`}],
+                    user: {
+                        email: request.body.email
+                    }
+                })
+            } else{
+                if(!userExists.verifyPassword(password)){
+                    response.render("auth/login.pug",{
+                        page:"Login",
+                        errors:[{msg:`User and password does not match`}],
+                        user: {
+                            email: request.body.email
+                        }
+                    })
+                } else{
+                    response.send("Dashboard!")
+                }
+            }
+            
+        }
+
+    } else{
+        response.render("../views/auth/login.pug",{
+            page:"Login",
+            errors:resultValidation.array(),
+            user: {
+                email: request.body.email
+            }
+        })
+    }
+
+    return 0;
+}
+
+export { formLogin, formRegister, formPasswordRecovery, formPasswordUpdate, insertUser, authenticateUser, confirmAccount, updatePassword, emailChangePassword };
