@@ -1,5 +1,5 @@
 import express from 'express'
-import { formLogin, formPasswordRecovery, formRegister, insertUser ,confirmAccount, updatePassword, authenticateUser, emailChangePassword, formPasswordUpdate} from "../controllers/userController.js";
+import { formLogin, formPasswordRecovery, formRegister,userHome, insertUser ,confirmAccount, updatePassword, authenticateUser, emailChangePassword, formPasswordUpdate} from "../controllers/userController.js";
 
 
 
@@ -14,6 +14,7 @@ router.post("/password-recovery", emailChangePassword);
 router.post("/", authenticateUser) //Login funcional
 router.get("/update-password/:token", formPasswordUpdate); //Comprobar token
 router.post("/update-password/:token", updatePassword); //Nuevo password
+router.get("/home", userHome)//Vista de cada usuario
 
 
 

@@ -5,10 +5,10 @@ import db from './config/db.js';
 import User from './models/user.js';
 import helmet from 'helmet'; 
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 dotenv.config({
     path:'src/.env'
 })
-
 
 //*Instanciamos el modulo
 const app = express();
@@ -17,11 +17,11 @@ app.use(express.urlencoded({
 }));
 
 // HABILITAR COOKIEPARSER PARA LEER, ESCRIBIR Y ELIMINAR EN LAS COOKIES DEL NAVEGADOR.
+app.use(cookieParser({
+    cookie:true
+}))
 
-
-
-
-
+//TEMPLATE ENGINE
 app.set('view engine', 'pug');
 app.set('views', './src/views');
 app.use(express.static('./src/public'));
@@ -41,6 +41,7 @@ try{
 }
 catch{
     console.log("Ocurrio un error al intentar conectarse a la base de datos :c ");
+    
 }
 
 app.use('/', generalRoutes);

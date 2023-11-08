@@ -1,6 +1,6 @@
 import User from "../models/user.js";
 import { check, validationResult } from "express-validator";
-import { generateToken } from "../lib/tokens.js";
+import { generateToken, generateJwt } from "../lib/tokens.js";
 import bcrypt from 'bcrypt';
 import { emailRegister, emailPasswordRecovery } from "../lib/emails.js";
 
@@ -34,7 +34,6 @@ const formPasswordUpdate = async (request, response) => {
 
     })
 }
-
 
 const formRegister = (request, response) => {
 
@@ -267,8 +266,8 @@ const authenticateUser = async(request,response ) =>{
                 page:"Login",
                 errors:[{msg:`The user associated to: ${email} was not found`}],
                 user: {
-                    email: request.body.email
-                }
+                    email
+                                }
             })
         }else{
             console.log("El usuario existe")
@@ -279,7 +278,7 @@ const authenticateUser = async(request,response ) =>{
                     page:"Login",
                     errors:[{msg:`The user associated to: ${email} was found but not verified`}],
                     user: {
-                        email: request.body.email
+                        email
                     }
                 })
             } else{
@@ -288,16 +287,23 @@ const authenticateUser = async(request,response ) =>{
                         page:"Login",
                         errors:[{msg:`User and password does not match`}],
                         user: {
-                            email: request.body.email
+                            email
                         }
                     })
-                } else{
-                    response.send("Dashboard!")
+                }else{
+                    console.log(`El usuario: ${email} Existe y esta autenticado`);
+                    //Generar el token de accesso
+                    const token = generateJwt(userExists.id);
+                    response.cookie('_token',token,{
+                        httpOnly:true,//Solo via navegador, a nivel API no
+                        //secure:true  //Esto solo se habilitara en caso de conta con un certificado https
+
+
+                    }).redirect('/login/home');
                 }
             }
-            
         }
-
+ 
     } else{
         response.render("../views/auth/login.pug",{
             page:"Login",
@@ -311,4 +317,8 @@ const authenticateUser = async(request,response ) =>{
     return 0;
 }
 
-export { formLogin, formRegister, formPasswordRecovery, formPasswordUpdate, insertUser, authenticateUser, confirmAccount, updatePassword, emailChangePassword };
+const userHome = (req, res) => {
+    res.render('user/home')
+}
+
+export { formLogin, formRegister, formPasswordRecovery, formPasswordUpdate, insertUser, authenticateUser, confirmAccount, updatePassword, emailChangePassword, userHome};
