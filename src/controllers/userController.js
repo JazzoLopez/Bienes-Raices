@@ -28,7 +28,7 @@ const formPasswordUpdate = async (request, response) => {
         })
     }
 
-    response.render("../views/auth/password-update.pug", {
+    response.render("auth/password-update", {
         isLogged: false,
         page: "Password update",
 
@@ -318,7 +318,9 @@ const authenticateUser = async(request,response ) =>{
 }
 
 const userHome = (req, res) => {
-    res.render('user/home')
+    res.render('user/home',{
+        showHeader:true
+    })
 }
 
 export { formLogin, formRegister, formPasswordRecovery, formPasswordUpdate, insertUser, authenticateUser, confirmAccount, updatePassword, emailChangePassword, userHome};

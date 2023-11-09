@@ -6,16 +6,16 @@ import { formLogin, formPasswordRecovery, formRegister,userHome, insertUser ,con
 const router = express.Router();
 
 router.get("/", formLogin) //Login
-router.get("/register", formRegister) //Vista registro
+router.get("/register", formRegister) //Vista registro  
 router.post("/register",insertUser); //Registrar usuario
 router.get("/confirm/:token", confirmAccount);//Confirmar correo
 router.get("/password-recovery", formPasswordRecovery); //olvide mi contraseña
 router.post("/password-recovery", emailChangePassword);
 router.post("/", authenticateUser) //Login funcional
 router.get("/update-password/:token", formPasswordUpdate); //Comprobar token
+
 router.post("/update-password/:token", updatePassword); //Nuevo password
 router.get("/home", userHome)//Vista de cada usuario
-
 
 
 

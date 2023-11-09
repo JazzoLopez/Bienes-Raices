@@ -6,8 +6,9 @@ html(lang="en")
         title Real State &lt; 220627 &gt; | #{page}
         link(rel="stylesheet", href="/css/app.css")  
         script(src="/js/setTime.js") 
-    body.mint-h-screen.bg-Fondo.font-mono
-        include navbar
+    body.mint-h-screen.bg-Fondo
+        if showHeader
+            include navbar
         main(class="mx-auto container mrt-10 px2")
             block content
 
