@@ -3,10 +3,11 @@ import{findAll, insertOne, findOneById, findOneByUserId, updateOne, deleteOne} f
 const router = express.Router();
 
 router.get('/', (request, response) => response.render("layout/index.pug", {page: "Home"}));
-router.get('/insertOne', insertOne)
-router.get('/findOneById', findOneById)
-router.get('/findOneByUserId', findOneByUserId)
-router.get('/updateOne', updateOne)
-router.get('/deleteOne', deleteOne)
-router.get('/findAll',findAll)
+router.post('/insertOne', insertOne) //* Completado
+router.get('/findOneById/:id', findOneById) //* Completado
+router.get('/findOneByUserId/:userID', findOneByUserId) //* Completado
+router.put('/updateOne/:id', updateOne)
+router.delete('/deleteOne/:id', deleteOne)//*COMPLETADO
+router.get('/findAll',findAll)//* Completado
+
 export default router;

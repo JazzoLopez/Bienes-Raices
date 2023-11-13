@@ -18,6 +18,7 @@ const generateJwt = (userID) =>
         expiresIn:'1d'
     })
 
+    
 //module.exports(generateToken);
 export{
     generateToken, generateJwt

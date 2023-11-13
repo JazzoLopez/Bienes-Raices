@@ -4,18 +4,29 @@ import userRoutes from './routes/userRoutes.js';
 import propertyRoutes from './routes/propertyRoutes.js'
 import db from './config/db.js';
 import User from './models/user.js';
+import Property from './models/property.js'
 import helmet from 'helmet'; 
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+
+
+
+
 dotenv.config({
     path:'src/.env'
 })
+
+
 
 //*Instanciamos el modulo
 const app = express();
 app.use(express.urlencoded({
     extended:false 
 }));
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
+app.use(morgan('dev'));
 
 // HABILITAR COOKIEPARSER PARA LEER, ESCRIBIR Y ELIMINAR EN LAS COOKIES DEL NAVEGADOR.
 app.use(cookieParser({
