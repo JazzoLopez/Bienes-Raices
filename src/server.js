@@ -39,7 +39,17 @@ app.set('views', './src/views');
 app.use(express.static('./src/public'));
 
 // HABILITAR LA PROTECCION A TRAVES DE HELMET
-app.use(helmet());
+
+// app.use(helmet.contentSecurityPolicy({
+//     directives:{
+//         defaultSrc:["'self'"],
+//         scriptSrc:["'self'",'https://unpkg.com','https://cdn.cloudflare.com'],
+//         styleSrc:["'self'",'https://unpkg.com','https://cdn.cloudflare.com',"'unsafe-inline'"],
+//         imgSrc:["'self'",'data:','https://unpkg.com'],
+//         fontSrc:["'self'", 'https://unpkg.com']
+//     }
+// }));
+
 
 app.listen(process.env.SERVER_PORT, (request, response) => {
     console.log(`EL servicio HTTP ha sido iniciado... \n  El servicio esta escuchando por el puerto: ${process.env.SERVER_PORT}`)
@@ -61,4 +71,5 @@ app.use('/login', userRoutes); //!Del usuario
 app.use('/properties',propertyRoutes) //!De las propiedades
 
 
-//TODO: investigar web pack Que son los seeders, que es leaflet
+//TODO: Jueves examen, esri estudiar
+//* script( src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js") le da la funcionalidad al mapa
