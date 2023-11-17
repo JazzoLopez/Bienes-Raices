@@ -1,7 +1,7 @@
     //Auntoinvocacion
     (function(){
         const lat = 20.265486;
-    const lng = -97.961001;//20.206518,-98.008033
+    const lng = -97.961001;
         const map = L.map('map').setView([lat, lng], 16);
         let marker
         const geocoderService=L.esri.Geocoding.geocodeService();

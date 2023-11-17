@@ -66,8 +66,8 @@ catch{
     
 }
 
-app.use('/', generalRoutes); //!Mi reto
-app.use('/login', userRoutes); //!Del usuario
+//app.use('/', generalRoutes); //!Mi reto
+app.use('/', userRoutes); //!Del usuario
 app.use('/properties',propertyRoutes) //!De las propiedades
 
 

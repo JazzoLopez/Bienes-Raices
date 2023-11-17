@@ -3,6 +3,8 @@ import { check, validationResult } from "express-validator";
 import { generateToken, generateJwt } from "../lib/tokens.js";
 import bcrypt from 'bcrypt';
 import { emailRegister, emailPasswordRecovery } from "../lib/emails.js";
+import { token } from "morgan";
+
 
 
 const formLogin = (request, response) => {
@@ -293,13 +295,13 @@ const authenticateUser = async(request,response ) =>{
                 }else{
                     console.log(`El usuario: ${email} Existe y esta autenticado`);
                     //Generar el token de accesso
-                    const token = generateJwt(userExists.id);
+                    const token = generateJwt(userExists.id,userExists.id);
                     response.cookie('_token',token,{
                         httpOnly:true,//Solo via navegador, a nivel API no
                         //secure:true  //Esto solo se habilitara en caso de conta con un certificado https
 
 
-                    }).redirect('/login/home');
+                    }).redirect('/home');
                 }
             }
         }
@@ -318,8 +320,11 @@ const authenticateUser = async(request,response ) =>{
 }
 
 const userHome = (req, res) => {
+    const token = req.cookies._token;
+    console.log(token)
     res.render('user/home',{
-        showHeader:true
+        showHeader:true,
+        page:"Home"
     })
 }
 
