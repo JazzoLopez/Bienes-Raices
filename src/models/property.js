@@ -2,14 +2,14 @@ import { DataTypes } from "sequelize";
 import db from '../config/db.js'
 
 const Property = db.define('tbb_properties', {
-    
-    title:{ //* Titulo de la propiedad
+
+    title: { //* Titulo de la propiedad
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    description:{ //* Descripcion
+    description: { //* Descripcion
         type: DataTypes.TEXT,
-        allowNull:false
+        allowNull: false
     },
     rooms: { //* Habitaciones /Cuartos
         type: DataTypes.INTEGER,
@@ -23,11 +23,11 @@ const Property = db.define('tbb_properties', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    userID:{//* Id del usuario 
+    userID: {//* Id del usuario 
         type: DataTypes.INTEGER,
-        allowNull:true
-    }   
-    
+        allowNull: true
+    }
+
 })
 
 

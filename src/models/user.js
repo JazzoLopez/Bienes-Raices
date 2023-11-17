@@ -1,47 +1,47 @@
-import {DataTypes} from 'sequelize'
+import { DataTypes } from 'sequelize'
 import db from '../config/db.js'
 
 import bcrypt from 'bcrypt';
-    
+
 
 //* Modelo de la tabla usuarios
 const User = db.define('tbb_users', {
-    name:{
+    name: {
         type: DataTypes.STRING, //Tipo de dato
         allowNull: false //* Para que sean obligatorios
     },
 
-    email:{
+    email: {
         type: DataTypes.STRING,
-        unique:true,
-        allowNull:false
+        unique: true,
+        allowNull: false
     },
 
-    password:{
+    password: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
 
     token: {
-        type:DataTypes.STRING,
-        unique:true,
-        defaultValue:""
+        type: DataTypes.STRING,
+        unique: true,
+        defaultValue: ""
     },
     verified: {
-        type:DataTypes.BOOLEAN,
-        defaultValue:false
-}
-    
-},{
-    hooks:{
-        beforeCreate: async (user) =>{
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    }
+
+}, {
+    hooks: {
+        beforeCreate: async (user) => {
             const salt = await bcrypt.genSalt(10);
-            user.password=await bcrypt.hash(user.password,salt);
+            user.password = await bcrypt.hash(user.password, salt);
         }
     }
 });
 
-User.prototype.verifyPassword = function(password){
+User.prototype.verifyPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 }
 

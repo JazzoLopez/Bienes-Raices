@@ -1,18 +1,16 @@
 import Property from "../models/property.js"
 import User from "../models/user.js"
 
-const findAll =  async (req, res) => {
-    const properties = await Property.findAll({where:{}});
+const findAll = async (req, res) => {
+    const properties = await Property.findAll({ where: {} });
     res.json(
         properties
     );
     console.log('Obteniendo todos los registros en la bd de la tabla de propiedades')
 }
+const insertOne = async (req, res) => {
 
-
-const insertOne =async (req, res) => {
-    
-    const {title, description, rooms, parkingLot, wc, userID} = req.body;
+    const { title, description, rooms, parkingLot, wc, userID } = req.body;
     console.log(`El título es ${title}`);
     console.log(`La descripción es ${description}`);
     console.log(`El número de habitaciones es ${rooms}`);
@@ -20,15 +18,15 @@ const insertOne =async (req, res) => {
     console.log(`El número de baños es ${wc}`);
     console.log(`El ID del usuario es ${userID}`);
 
-    
-    try{
+
+    try {
         let newProperty = await Property.create({
-            title, description, rooms, parkingLot, wc , userID
-        
+            title, description, rooms, parkingLot, wc, userID
+
         });
-       
+
     }
-    catch(error){
+    catch (error) {
         console.log(error)
     }
 
@@ -37,20 +35,20 @@ const insertOne =async (req, res) => {
 
 }
 
-const findOneById =  async (req, res) => {
+const findOneById = async (req, res) => {
     const id = req.params.id;
     const property = await Property.findOne({
-        where:{id}
+        where: { id }
     });
-   res.json({
-    property
-   });
-   console.log(`Obteniendo los datos relacionados con el id: ${id}`);
+    res.json({
+        property
+    });
+    console.log(`Obteniendo los datos relacionados con el id: ${id}`);
 }
 
 const findOneByUserId = async (req, res) => {
     const userID = req.params.userID;
-    const property = await Property.findOne({ where:{userID}});
+    const property = await Property.findOne({ where: { userID } });
     console.log(`Busquedas de las propiedades por el id del usuario: ${userID} la primer propiedad tiene el nombre de: ${property.title}`)
     res.json({
         property
@@ -82,17 +80,14 @@ const updateOne = async (req, res) => {
     }
 };
 
-
-
-
-const deleteOne = async(req, res) => {
+const deleteOne = async (req, res) => {
     const id = req.params.id;
     await Property.destroy({
-        where:{id}
+        where: { id }
     });
     console.log(`Los datos con el id: ${id} fueron eliminados`)
     res.json("Eliminado correctamente")
 }
 
 
-export {findAll, insertOne, findOneById, findOneByUserId, updateOne, deleteOne};
+export { findAll, insertOne, findOneById, findOneByUserId, updateOne, deleteOne };

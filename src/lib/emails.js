@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config({
-    path:'src/.env'
+  path: 'src/.env'
 })
 import nodemailer from 'nodemailer';
 const transport = nodemailer.createTransport({
@@ -13,15 +13,15 @@ const transport = nodemailer.createTransport({
 });
 
 const emailRegister = async (userData) => {
-  const {name, email, token} = userData
-    console.log(`Intentando enviar un correo electronico de activación al usuario ${email}`)
-    //* ENVIANDO  EL  CORREO 
-    await transport.sendMail({
-      from:'220627@utxicotepec.edu.mx', //Emitente
-      to:email, //Destinatario
-      subject: "RealState-220627: Verify your account.", //Asunto
-      text:"Welcome to RealState-220627, to continue is mandatory that yout click on link below to activate your account.", //Cuerpo
-      html:
+  const { name, email, token } = userData
+  console.log(`Intentando enviar un correo electronico de activación al usuario ${email}`)
+  //* ENVIANDO  EL  CORREO 
+  await transport.sendMail({
+    from: '220627@utxicotepec.edu.mx', //Emitente
+    to: email, //Destinatario
+    subject: "RealState-220627: Verify your account.", //Asunto
+    text: "Welcome to RealState-220627, to continue is mandatory that yout click on link below to activate your account.", //Cuerpo
+    html:
       `<html>
       <head>
         <style>
@@ -153,19 +153,19 @@ const emailRegister = async (userData) => {
       </body>
     </html>`
 
-    })
+  })
 }
 
 const emailPasswordRecovery = async (userData) => {
-  const {name, email, token} = userData
-    console.log(`Intentando enviar un correo electronico dpara la recuperación de cuenta del usuario: ${email}`)
-    //* ENVIANDO  EL  CORREO 
-    await transport.sendMail({
-      from:'220627@utxicotepec.edu.mx', //Emitente
-      to:email, //Destinatario
-      subject: "RealState-220627: Reset your password.", //Asunto
-      text:"Welcome to RealState-220627, to continue is mandatory that yout click on link below to activate your account.", //Cuerpo
-      html:
+  const { name, email, token } = userData
+  console.log(`Intentando enviar un correo electronico dpara la recuperación de cuenta del usuario: ${email}`)
+  //* ENVIANDO  EL  CORREO 
+  await transport.sendMail({
+    from: '220627@utxicotepec.edu.mx', //Emitente
+    to: email, //Destinatario
+    subject: "RealState-220627: Reset your password.", //Asunto
+    text: "Welcome to RealState-220627, to continue is mandatory that yout click on link below to activate your account.", //Cuerpo
+    html:
       `<html>
       <head>
         <style>
@@ -297,11 +297,11 @@ const emailPasswordRecovery = async (userData) => {
       </body>
     </html>`
 
-    })
+  })
 }
 
 
 
 
-export {emailRegister, emailPasswordRecovery}
+export { emailRegister, emailPasswordRecovery }
 
