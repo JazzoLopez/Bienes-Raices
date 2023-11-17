@@ -4,7 +4,7 @@ import { formLogin, formPasswordRecovery, formRegister, userHome, insertUser, co
 
 
 const router = express.Router();
-
+router.get('/', (request, response) => response.render("layout/index.pug", { page: "Home" }));
 router.get("/login", formLogin) //Login
 router.get("/login/register", formRegister) //Vista registro  
 router.post("/login/register", insertUser); //Registrar usuario
