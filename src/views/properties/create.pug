@@ -12,6 +12,11 @@ block content
                 div
                     label.block.text-sm.uppercase.text-gray-600.mb-3.font-bold(for="title") Title of announcement
                     input#title.w-full.px-3.py-2.border-gray-300.rounded-md.placeholder-gray-400(type="text" name="title" placeholder="ex.Two floor house")
+                    
+                div
+                    label.block.text-sm.uppercase.text-gray-600.mb-3.font-bold(for="description") Description:
+                    textarea#description.w-full.px-3.py-2.border-gray-300.rounded-md.placeholder-gray-400(type="text" name="description" placeholder="Detailed description about property.")
+
                 div(class="md:flex md:gap-4") 
                     div(class="md:w-1/2")   
                         label.block.text-sm.uppercase.text-gray-600.mb-3.font-bold(for="category") Title of category
@@ -68,5 +73,4 @@ block scripts
     script(src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js")
     script(src="https://unpkg.com/esri-leaflet-geocoder@2.2.13/dist/esri-leaflet-geocoder.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/2.7.0/bundle.min.js")
-
     script( src="/js/map.js") 

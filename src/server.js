@@ -3,8 +3,7 @@ import generalRoutes from './routes/generalRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import propertyRoutes from './routes/propertyRoutes.js'
 import db from './config/db.js';
-import User from './models/user.js';
-import Property from './models/property.js'
+import {User, Property} from './models/relationships.js'
 import helmet from 'helmet'; 
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -39,15 +38,15 @@ app.use(express.static('./src/public'));
 
 //HABILITAR LA PROTECCION A TRAVES DE HELMET
 //NOS FALRA UNA SEGURIDAD NUEVA
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", 'https://unpkg.com', 'https://cdnjs.cloudflare.com', "'unsafe-eval'"],
-    styleSrc: ["'self'", 'https://unpkg.com', 'https://cloudflare.com', 'https://cdnjs.cloudflare.com'],
-    imgSrc: ["'self'", 'data:', 'https://unpkg.com', 'https://cloudflare.com', 'https://cdnjs.cloudflare.com', 'https://a.tile.openstreetmap.org', 'https://b.tile.openstreetmap.org', 'https://c.tile.openstreetmap.org'],
-    connectSrc: ["'self'", 'https://tile-provider-domain.com', 'https://geocode.arcgis.com'],
-  },
-}));
+// app.use(helmet.contentSecurityPolicy({
+//   directives: {
+//     defaultSrc: ["'self'"],
+//     scriptSrc: ["'self'", 'https://unpkg.com', 'https://cdnjs.cloudflare.com', "'unsafe-eval'"],
+//     styleSrc: ["'self'", 'https://unpkg.com', 'https://cloudflare.com', 'https://cdnjs.cloudflare.com'],
+//     imgSrc: ["'self'", 'data:', 'https://unpkg.com', 'https://cloudflare.com', 'https://cdnjs.cloudflare.com', 'https://a.tile.openstreetmap.org', 'https://b.tile.openstreetmap.org', 'https://c.tile.openstreetmap.org'],
+//     connectSrc: ["'self'", 'https://tile-provider-domain.com', 'https://geocode.arcgis.com'],
+//   },
+// }));
 
 
 
