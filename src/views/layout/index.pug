@@ -7,10 +7,11 @@ html(lang="en")
         link(rel="icon", type="image/x-icon", href="/img/bienes-raices.png")
         link(rel="stylesheet", href="/css/app.css")
         block styles 
-        script(src="/js/setTime.js") 
+        script(src="/js/setTime.js")    
     body.mint-h-screen.bg-Fondo
-        if showHeader
-            include navbar
+        main(class="mx-auto container mrt-10 px2")
+            if showHeader 
+                include navbar
         main(class="mx-auto container mrt-10 px2")
             block content
         block scripts 

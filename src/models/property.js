@@ -36,7 +36,7 @@ const Property = db.define('tbb_properties', {
     },lat:{
         type: DataTypes.STRING(150),
         allowNull: false
-    },long:{
+    },lng:{
         type: DataTypes.STRING(150),
         allowNull: false
     },image:{

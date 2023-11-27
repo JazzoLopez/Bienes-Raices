@@ -35,8 +35,12 @@ const saveNewProperty = async (req, res) => {
 
     await check("street").isInt({min:0, max:5}).withMessage("The number of parking lots is unknown").run(req)
 
-    console.log(`lat: ${req.body.lat}, long: ${req.body.lng}`)
+    await check("lat").isInt({min:-90,max:90}).withMessage("the latitude is not in the requested range").run(req)
 
+    await check("lng").isInt({min:-180, max: 180}).withMessage("The length is not within the requested range.").run(req)
+
+    res.json(validationResult(req))
+    console.log(`lat: ${req.body.lat}, long: ${req.body.lng}`)
     let data = req.body
     console.log(data);
 }
