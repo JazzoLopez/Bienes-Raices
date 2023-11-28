@@ -248,8 +248,6 @@ const emailChangePassword = async (req, res) => {
     return 0;
 }
 
-
-
 const authenticateUser = async (request, response) => {
     //Verificar los campos de correo y contraseña
     await check("email").notEmpty().withMessage("Email field is required").isEmail().withMessage("This is not in email format").run(request)

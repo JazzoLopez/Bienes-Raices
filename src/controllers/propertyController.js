@@ -20,6 +20,7 @@ const formProperty = async (req, res) => {
 }
 
 const saveNewProperty = async (req, res) => {
+    
     await check("title").notEmpty().withMessage("The title is required").isLength({min:15, max:150}).withMessage("The title property must have between 15 and 150 characters").run(req)
 
     await check("description").notEmpty().withMessage("The description is required").run(req)
@@ -33,16 +34,46 @@ const saveNewProperty = async (req, res) => {
 
     await check("nwc").isInt({min:0, max:5}).withMessage("The number of wc is unknown").run(req)
 
-    await check("street").isInt({min:0, max:5}).withMessage("The number of parking lots is unknown").run(req)
+    await check("parkingLot").isInt({min:0, max:5}).withMessage("The number of parking lot is unknow").run(req)
 
-    await check("lat").isInt({min:-90,max:90}).withMessage("the latitude is not in the requested range").run(req)
+    await check("street").notEmpty().withMessage("The name of the street is unknow").run(req)
 
-    await check("lng").isInt({min:-180, max: 180}).withMessage("The length is not within the requested range.").run(req)
+    await check("lat").isFloat({min:-90,max:90}).withMessage("the latitude is not in the requested range").run(req)
 
-    res.json(validationResult(req))
+    await check("lng").isFloat({min:-180, max: 180}).withMessage("The length is not within the requested range.").run(req)
+
+    //  res.json(validationResult(req))
+
+    let resultValidate = validationResult(req);
     console.log(`lat: ${req.body.lat}, long: ${req.body.lng}`)
     let data = req.body
     console.log(data);
+     
+    const {title, description, category, priceRange, nRooms, nwc, parkingLot, street, lat, lng} =req.body;
+
+    if(resultValidate.isEmpty()){
+        //Creamos
+        const savedProperty = await Property.create({
+            title, description, category, priceRange, rooms:nRooms,wc:nwc, parkinglot:parkingLot, street, lat, lng, price_ID:priceRange, category_ID:category
+        })
+        res.send("Todo bien")
+    }
+    else{
+        const [categories, prices] = await Promise.all([Category.findAll(), Price.findAll()])
+        res.render('properties/create.pug', {
+            page: 'New property',
+            showHeader: true,
+            categories,
+            prices,
+            data:req.body,
+            errors: resultValidate.array(), 
+            propertyData: {
+                title, description, category, priceRange, nRooms, nwc, parkingLot, street, lat, lng
+            },
+    
+        });
+    
+    }
 }
 
 export { formProperty, saveNewProperty }
