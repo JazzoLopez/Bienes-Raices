@@ -6,7 +6,6 @@ import { check, validationResult } from "express-validator";
 const formProperty = async (req, res) => {
     //TODO: Obtener las categorias, y precios actuales para pintarlos en el formulario
     const [categories, prices] = await Promise.all([Category.findAll(), Price.findAll()])
-    
     res.render('properties/create.pug', {
         page: 'New property',
         showHeader: true,
@@ -50,13 +49,17 @@ const saveNewProperty = async (req, res) => {
     console.log(data);
      
     const {title, description, category, priceRange, nRooms, nwc, parkingLot, street, lat, lng} =req.body;
+   // const prueba = user.userID
+    console.log(`El usuario logeado es el: ${req.user.id}`)
 
     if(resultValidate.isEmpty()){
         //Creamos
         const savedProperty = await Property.create({
-            title, description, category, priceRange, rooms:nRooms,wc:nwc, parkinglot:parkingLot, street, lat, lng, price_ID:priceRange, category_ID:category
+            title, description, category, priceRange, rooms:nRooms,wc:nwc, parkinglot:parkingLot, street, lat, lng, price_ID:priceRange, category_ID:category, user_ID: req.user.id
         })
-        res.send("Todo bien")
+
+        const uuidProperty = savedProperty.id
+        res.redirect(`/properties/addImage/${uuidProperty}`)
     }
     else{
         const [categories, prices] = await Promise.all([Category.findAll(), Price.findAll()])
@@ -76,4 +79,9 @@ const saveNewProperty = async (req, res) => {
     }
 }
 
-export { formProperty, saveNewProperty }
+const addImage = (req, res) => {
+    console.log(`Visualizar el formulario para agregar imagenes`)
+    res.render('properties/images')
+}
+
+export { formProperty, saveNewProperty, addImage}
