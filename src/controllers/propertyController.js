@@ -81,7 +81,26 @@ const saveNewProperty = async (req, res) => {
 
 const addImage = (req, res) => {
     console.log(`Visualizar el formulario para agregar imagenes`)
-    res.render('properties/images')
+    res.render('properties/images',{
+        page:"Add image"
+    })
+
+
 }
 
-export { formProperty, saveNewProperty, addImage}
+const loadImage = async (req, res) => {
+    //VERIFICAR QUE LA PROPIEDAD EXISTA
+    const {idProperty} = req.params
+    const property = await Property.findByPrimaryKey(idProperty);
+    if(!property){
+        return res.redirect('/home')
+    }else{
+
+    }
+    //TODO: VERIFICAR QUE LA PROPIEDAD NO ESTE PUBLICADA
+
+    //TODO: VALIDAR QUE LA PROPIEDAD PERTENEZCA A QUIEN VISITA LA PAGINA
+
+}
+
+export { formProperty, saveNewProperty, addImage, loadImage}

@@ -219,7 +219,7 @@ const emailChangePassword = async (req, res) => {
             userExists.token = token;
             userExists.save();
 
-            //TODO: enviar el correo con el nuevo token
+            //enviar el correo con el nuevo token
 
             emailPasswordRecovery({ name: userExists.name, email: userExists.email, token: userExists.token })
 
@@ -294,12 +294,10 @@ const authenticateUser = async (request, response) => {
                 } else {
                     console.log(`El usuario: ${email} Existe y esta autenticado`);
                     //Generar el token de accesso
-                    const token = generateJwt(userExists.id, userExists.id);
+                    const token = generateJwt(userExists.id);
                     response.cookie('_token', token, {
                         httpOnly: true,//Solo via navegador, a nivel API no
-                        //secure:true  //Esto solo se habilitara en caso de conta con un certificado https
-
-
+                        //secure:true  //Esto solo se habilitara en caso de conta con un certificado http
                     }).redirect('/home');
                 }
             }
