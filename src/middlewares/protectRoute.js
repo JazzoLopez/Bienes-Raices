@@ -13,9 +13,9 @@ const protectRoute = async (req, res, next) => {
     //VERIFICAR QUE EL TOKEN
     try {
         const decoded = jsonWebToken.verify(_token, process.env.JWT_SECRET_HASH_STRING)
-        const loggedUser = await User.scope('deletePassword').findByPk(decoded.userID)
+        const loggedUser = await User.findByPk(decoded.userID)
         console.log(loggedUser)
-         //TODO: ALMACENAR EL USUARIO EN EL REQUEST
+         //ALMACENAR EL USUARIO EN EL REQUEST
         if (loggedUser) {
             req.user = loggedUser;
         } else {

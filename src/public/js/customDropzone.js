@@ -26,7 +26,7 @@ eval("(function webpackUniversalModuleDefinition(root, factory) {\n\tif(true)\n\
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var dropzone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dropzone */ \"./node_modules/dropzone/dist/dropzone.js\");\n\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (dropzone__WEBPACK_IMPORTED_MODULE_0__);\n\n//# sourceURL=webpack://mx.edu.utxj.ti.dsm.awos.bienesraices-220627/./src/lib/customDropzone.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var dropzone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dropzone */ \"./node_modules/dropzone/dist/dropzone.js\");\n\r\n\r\ndropzone__WEBPACK_IMPORTED_MODULE_0__.Dropzone.options.image = {\r\n    dictDefaultMessage:\"Please load the selected images\",\r\n    acceptedFiles:\".png, .jpg, .jpeg, .bmp, .svg\",\r\n    maxFilesize: 5,\r\n    maxFiles: 1,\r\n    paralelUploads: 1,\r\n    autoProccessQueue: false,\r\n    addRemoveLinks: true,\r\n    //dictRemoveFile:\"Borrar fotografia\" para español\r\n    //dictMaxFilesExceeded: \"Solamente uno\"\r\n\r\n    \r\n\r\n}\r\n\n\n//# sourceURL=webpack://mx.edu.utxj.ti.dsm.awos.bienesraices-220627/./src/lib/customDropzone.js?");
 
 /***/ })
 
@@ -57,23 +57,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports

@@ -1,6 +1,7 @@
 import Price from "../models/price.js";
 import Category from "../models/category.js";
 import Property from "../models/property.js";
+import upload from "../middlewares/uploadImage.js";
 import { check, validationResult } from "express-validator";
 
 const formProperty = async (req, res) => {
@@ -79,28 +80,54 @@ const saveNewProperty = async (req, res) => {
     }
 }
 
-const addImage = (req, res) => {
+const addImage = async (req, res) => {
     console.log(`Visualizar el formulario para agregar imagenes`)
+
+    const {idProperty} = req.params
+    console.log(idProperty)
+    //const userID = req.user.id
+    const property = await Property.findByPk(idProperty);
+    if(!property){
+        return res.redirect('/home')
+    }
+    
     res.render('properties/images',{
-        page:"Add image"
+        page:`Add image to ${property.title}`,
+        property
     })
 
 
 }
 
-const loadImage = async (req, res) => {
+const loadImage = async (req, res, next) => {
     //VERIFICAR QUE LA PROPIEDAD EXISTA
     const {idProperty} = req.params
-    const property = await Property.findByPrimaryKey(idProperty);
+    const property = await Property.findByPk(idProperty);
     if(!property){
         return res.redirect('/home')
-    }else{
-
     }
-    //TODO: VERIFICAR QUE LA PROPIEDAD NO ESTE PUBLICADA
+    else{
+        //TODO: VERIFICAR QUE LA PROPIEDAD NO ESTE PUBLICADA
+        if(!property.published){
+            console.log("Dado que la propiedad no esta publicada se le pueden agregar fotos")
+            const userID = req.user.id
+            //VALIDAR QUE LA PROPIEDAD PERTENEZCA A QUIEN VISITA LA PAGINA
 
-    //TODO: VALIDAR QUE LA PROPIEDAD PERTENEZCA A QUIEN VISITA LA PAGINA
+            if(property.userID == userID){
+                console.log(`El usuario dueño de la propiedad es el mismo del que se encuentra loggueado`);
+                next()
+                
+            }else{
+                return res.redirect('/home')
+            }
+        }else{
+            return res.redirect('/home')
+        }
+    }
 
+    
+
+    
 }
 
 export { formProperty, saveNewProperty, addImage, loadImage}
