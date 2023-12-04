@@ -14,7 +14,7 @@ const protectRoute = async (req, res, next) => {
     try {
         const decoded = jsonWebToken.verify(_token, process.env.JWT_SECRET_HASH_STRING)
         const loggedUser = await User.findByPk(decoded.userID)
-        console.log(loggedUser)
+        // console.log(loggedUser)
          //ALMACENAR EL USUARIO EN EL REQUEST
         if (loggedUser) {
             req.user = loggedUser;

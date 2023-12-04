@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import { check, validationResult } from "express-validator";
 import { generateToken, generateJwt } from "../lib/tokens.js";
 import bcrypt from 'bcrypt';
+import jsonWebToken from "jsonwebtoken";
 import { emailRegister, emailPasswordRecovery } from "../lib/emails.js";
 import { token } from "morgan";
 
@@ -316,12 +317,15 @@ const authenticateUser = async (request, response) => {
     return 0;
 }
 
-const userHome = (req, res) => {
+const userHome =async (req, res) => {
     const token = req.cookies._token;
+    const decoded = jsonWebToken.verify(token, process.env.JWT_SECRET_HASH_STRING)
+        const loggedUser = await User.findByPk(decoded.userID)
     console.log(token)
     res.render('user/home', {
         showHeader: true,
-        page: "Home"
+        page: "Home",
+        loggedUser
     })
 }
 

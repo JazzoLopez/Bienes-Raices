@@ -20,7 +20,7 @@ dotenv.config({
 //*Instanciamos el modulo
 const app = express();
 app.use(express.urlencoded({
-    extended: false
+    extended: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -30,6 +30,7 @@ app.use(morgan('dev'));//*ESTA ES MIA SOLO PARA LOS ESTATUS DE LA PETICION
 app.use(cookieParser({
     cookie: true
 }))
+
 
 //TEMPLATE ENGINE
 app.set('view engine', 'pug');
