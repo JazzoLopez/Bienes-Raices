@@ -28,4 +28,5 @@ Dropzone.options.image = {
         })
     }
 }
+//*kjqadnkdakdasadskd
 
