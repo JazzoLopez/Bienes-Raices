@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jsonWebToken from "jsonwebtoken";
 import { emailRegister, emailPasswordRecovery } from "../lib/emails.js";
 import { token } from "morgan";
+import Property from "../models/property.js";
 
 
 
@@ -318,14 +319,12 @@ const authenticateUser = async (request, response) => {
 }
 
 const userHome =async (req, res) => {
-    const token = req.cookies._token;
-    const decoded = jsonWebToken.verify(token, process.env.JWT_SECRET_HASH_STRING)
-        const loggedUser = await User.findByPk(decoded.userID)
-    console.log(token)
+   const {id} = req.user
+   const myProperties = await Property.findAll({where:{user_ID:id}})
     res.render('user/home', {
         showHeader: true,
         page: "Home",
-        loggedUser
+        myProperties
     })
 }
 

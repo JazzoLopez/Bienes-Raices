@@ -11,7 +11,6 @@ Dropzone.options.image = {
     //dictRemoveFile:"Borrar fotografia" para español
     //dictMaxFilesExceeded: "Solamente uno"
     headers:{
-
     },
     paramName:'image',
     //funcion cuando inicia dropzone
