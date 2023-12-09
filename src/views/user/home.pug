@@ -5,15 +5,21 @@ block content
             span.font-normal State
         h2.text-center.text-2xl.font-extrabold My properties
     a(href="/properties/create" class="rounded py-2 px-10 bg-cyan-500 hover:bg-cyan-600 text-sm font-bold text-center text-white uppercase my-5 inline-block w-full md:w-auto") Publish new property
-
+    //- pre= JSON.stringify(myProperties, undefined, 2)
     if myProperties.length
         div(class="bg-white shwadow rounded-lg")
             div(class="divide-y divide-gray-200")
                 each property in myProperties 
                     li  
-                        div(class="p-6 w-full flex-col flex sm:flex-row sm:items-center sm:justify-between space-y-8 gap4")
-                            div(class="sm:w-1/4 md:w-1/6")
-                            div(class="sm:w-2/4 md:w-3/6 lg:w-4/6")
-                            div(class="sm:w-1/4 md:w-2/6 lg-w-1/6")
+                        div(class="p-6 w-full flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-8 gap-4")
+                            div(class="sm:w-1/4 md:w-1/6") 
+                                img(src=`/img/uploads/${property.image}`, alt=`Image for the property ${property.title}` class="w-full block")
+                            div(class="sm:w-2/4 md:w-3/6 lg:w-4/6") 
+                                a(class="block text-2xl font-extrabold text-indigo-600 truncate" href="#")= property.description
+                                p(class="text-sm text-black font-bold")= property.tbc_category.name 
+                                svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
+                                    path(stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z")
+
+                            div(class="sm:w-1/4 md:w-2/6 lg-w-1/6") botones de accion
     else    
         p.text-center nothing properties

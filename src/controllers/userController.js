@@ -6,6 +6,8 @@ import jsonWebToken from "jsonwebtoken";
 import { emailRegister, emailPasswordRecovery } from "../lib/emails.js";
 import { token } from "morgan";
 import Property from "../models/property.js";
+import Category from "../models/category.js";
+import Price from "../models/price.js";
 
 
 
@@ -38,6 +40,7 @@ const formPasswordUpdate = async (request, response) => {
 
     })
 }
+
 
 const formRegister = (request, response) => {
 
@@ -320,7 +323,14 @@ const authenticateUser = async (request, response) => {
 
 const userHome =async (req, res) => {
    const {id} = req.user
-   const myProperties = await Property.findAll({where:{user_ID:id}})
+   const myProperties = await Property.findAll({
+    where: { user_ID: id },
+    include: {
+        model: Category,
+       
+    }
+});
+
     res.render('user/home', {
         showHeader: true,
         page: "Home",

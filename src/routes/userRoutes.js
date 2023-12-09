@@ -14,7 +14,8 @@ router.get("/login/password-recovery", formPasswordRecovery); //olvide mi contra
 router.post("/login/password-recovery", emailChangePassword);
 router.post("/login", authenticateUser) //Login funcional
 router.get("/login/update-password/:token", formPasswordUpdate); //Comprobar token
-router.post("/login/update-password/:token", updatePassword); //Nuevo passwordrouter.get('/', (request, response) => response.render("layout/index.pug", { page: "Home" }));//MI ENDPOINT DE PINTADOS
+router.post("/login/update-password/:token", updatePassword); //Nuevo password
+//router.get('/', (request, response) => response.render("layout/index.pug", { page: "Home" }));//MI ENDPOINT DE PINTADOS
 router.get("/home",protectRoute, userHome)//Vista de cada usuario
 
 
