@@ -12,11 +12,6 @@ Property.belongsTo(Category, {
     foreignKey: 'category_ID'
 });
 
-// En el modelo Category
-Category.hasOne(Property, {
-    foreignKey: 'category_ID'
-});
-
 // En el modelo Property
 Property.belongsTo(Category, {
     foreignKey: 'category_ID'
@@ -26,6 +21,17 @@ Property.belongsTo(Category, {
 Category.hasOne(Property, {
     foreignKey: 'category_ID'
 });
+
+// En el modelo Property
+Property.belongsTo(Price, {
+    foreignKey: 'price_ID'
+});
+
+// En el modelo Category
+Price.hasOne(Property, {
+    foreignKey: 'price_ID'
+});
+
 
 
 export{User, Property, Category, Price}

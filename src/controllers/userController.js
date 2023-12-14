@@ -325,10 +325,13 @@ const userHome =async (req, res) => {
    const {id} = req.user
    const myProperties = await Property.findAll({
     where: { user_ID: id },
-    include: {
+    include: [{
         model: Category,
        
-    }
+    },{
+        model:Price
+    }]
+    
 });
 
     res.render('user/home', {
