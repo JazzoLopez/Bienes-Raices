@@ -28,4 +28,6 @@ Crear un portal de bienes raices para aprender del entorno de Node.js y diferent
 
 El link del curso es el siguiente:
 <a href="https://www.udemy.com/course/nodejs-bootcamp-desarrollo-web-mvc-y-rest-apis/"> Node.js - Bootcamp Desarrollo Web inc. MVC y REST APIs </a>
-
+<br>
+<br>
+![Badge en Desarollo](https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green)
